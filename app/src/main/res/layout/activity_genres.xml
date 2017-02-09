@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.LinearLayoutCompat
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    tools:context=".activities.GenresActivity">
+
+    <android.support.design.widget.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/AppTheme.AppBarOverlay">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/genres_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            app:popupTheme="@style/AppTheme.PopupOverlay">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/title_activity_genres"
+                android:layout_gravity="center"
+                android:id="@+id/genres_toolbar_title"/>
+        </android.support.v7.widget.Toolbar>
+
+        <ListView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/genres_list_view"
+            android:layout_weight="1">
+        </ListView>
+
+        <Button
+            android:id="@+id/genres_counter_button"
+            android:text="@string/select_genre_counter"
+            android:layout_width="match_parent"
+            android:layout_weight="0"
+            android:layout_height="60dp" />
+
+    </android.support.design.widget.AppBarLayout>
+
+</android.support.v7.widget.LinearLayoutCompat>
