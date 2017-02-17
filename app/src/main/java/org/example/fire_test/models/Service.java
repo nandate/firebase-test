@@ -65,6 +65,7 @@ public class Service {
         this.pics = pics;
     }
 
+
     public ArrayList<String> getTags(){
         return tags;
     }

@@ -10,24 +10,18 @@ import org.example.fire_test.models.Genre;
 
 public class User extends Observable{
 
-    private String UID;
     private ArrayList<String> selected_genres;
     private ArrayList<String> used_services;
+
+
     private static User ourInstance = new User();
+
 
     public static User getInstance() {
         return ourInstance;
     }
 
     private User() {
-    }
-
-    public void setUID(String UID){
-        this.UID = UID;
-    }
-
-    public String getUID(){
-        return UID;
     }
 
 
@@ -60,13 +54,11 @@ public class User extends Observable{
     public void addUsedService(String serviceName)
     {
         used_services.add(serviceName);
-        setChanged();
     }
 
     public void removeUsedService(String serviceName)
     {
         used_services.remove(serviceName);
-        setChanged();
     }
 
 
@@ -74,6 +66,11 @@ public class User extends Observable{
     {
         return selected_genres.contains(genre);
     }
+
+    public boolean hasService(String service){
+        return used_services.contains(service);
+    }
+
 
 
     @Override

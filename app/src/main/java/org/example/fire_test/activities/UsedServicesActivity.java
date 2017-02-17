@@ -2,13 +2,16 @@ package org.example.fire_test.activities;
 
 
 import android.os.Bundle;
+import android.os.health.SystemHealthManager;
+import android.provider.ContactsContract;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.firebase.ui.database.FirebaseListAdapter;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -25,6 +28,7 @@ import org.example.fire_test.models.User;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Observer;
 
 /**
  * Created by takuya on 2/5/17.
@@ -33,12 +37,14 @@ import java.util.List;
 public class UsedServicesActivity extends AppCompatActivity{
 
     private ListView used_services_ListView;
+    private Button used_services_button;
 
     private FirebaseAuth mFirebaseAuth;
     private FirebaseUser mFirebaseUser;
     private DatabaseReference mDatabase;
 
     private List<Service> services=new ArrayList<>();
+
 
 
     @Override
@@ -49,77 +55,80 @@ public class UsedServicesActivity extends AppCompatActivity{
         setSupportActionBar(toolbar);
 
         mDatabase = FirebaseDatabase.getInstance().getReference();
-        ArrayList<String> selected_genres = User.getInstance().getSelected_genres();
+        final ArrayList<String> selected_genres = User.getInstance().getSelected_genres();
+        System.out.println(User.getInstance().getSelected_genres());
+
 
         used_services_ListView = (ListView)findViewById(R.id.select_used_services_list_view);
-        try{
-            for(int i=0;i<User.getInstance().getSelected_genres().size();i++){
-                mDatabase.child("genres").child(selected_genres.get(i)).child("services").limitToFirst(3).addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        for(DataSnapshot serviceSnapshot:dataSnapshot.getChildren()){
-                            final String service_name = serviceSnapshot.getValue(String.class);
-                            mDatabase.child("services").addListenerForSingleValueEvent(new ValueEventListener() {
-                                @Override
-                                public void onDataChange(DataSnapshot dataSnapshot) {
-                                    for(DataSnapshot snapshot:dataSnapshot.getChildren()){
-                                        Service service = snapshot.getValue(Service.class);
-                                        if(service.getName().equals(service_name)){
-                                            System.out.println(service);
-                                            services.add(service);
-                                        }
-                                    }
-                                }
-                                @Override
-                                public void onCancelled(DatabaseError databaseError) {
+        used_services_button = (Button)findViewById(R.id.used_service_button);
 
-                                }
-                            });
+        try{
+            mDatabase.child("genres").addValueEventListener(new ValueEventListener() {
+                ArrayList<String> s =new ArrayList<String>();
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    for(DataSnapshot snapshot:dataSnapshot.getChildren()){
+                        Genre genre = snapshot.getValue(Genre.class);
+                        for(int i=0;i<selected_genres.size();i++){
+                            if(selected_genres.get(i).equals(genre.getName())){
+                                ArrayList<String> genre_services = genre.getServices();
+                                s.add(genre_services.get(0));
+                            }
                         }
                     }
 
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
+                    mDatabase.child("services").addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            for(DataSnapshot snapshot:dataSnapshot.getChildren()){
+                                String name = (String) snapshot.child("name").getValue();
+                                for(int i=0;i<s.size();i++){
+                                    if(name.equals(s.get(i))){
+                                        Service service = new Service();
+                                        service.setName(name);
+                                        service.setTitle((String)snapshot.child("title").getValue());
+                                        service.setCost((String)snapshot.child("cost").getValue());
+                                        service.setDescription((String)snapshot.child("description").getValue());
+                                        service.setLink((String)snapshot.child("link").getValue());
+                                        ArrayList<String> tags = (ArrayList<String>)snapshot.child("tags").getValue();
+                                        service.setTags(tags);
 
-                    }
-                });
-            }
+                                        services.add(service);
+                                    }
+                                }
+                                UsedServiceListAdapter usedServiceListAdapter = new UsedServiceListAdapter(UsedServicesActivity.this,services);
+                                used_services_ListView.setAdapter(usedServiceListAdapter);
 
-            UsedServiceListAdapter usedServiceListAdapter = new UsedServiceListAdapter(this,getSampleServices());
-            used_services_ListView.setAdapter(usedServiceListAdapter);
+                            }
+
+
+
+
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+
+            });
+
+
+
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+
 
         }catch (Exception e){
             e.printStackTrace();
         }
     }
 
-    private ArrayList<Service> getSampleServices(){
-        ArrayList<Service> services = new ArrayList<>();
 
-
-        Service recme_service = new Service();
-        recme_service.setName("Recme");
-        recme_service.setTitle("Leading Mark, Inc.");
-        ArrayList<String> recme_screen_shots = new ArrayList<>();
-        recme_screen_shots.add("recme_scrn_1");
-        recme_screen_shots.add("recme_scrn_2");
-        recme_screen_shots.add("recme_scrn_3");
-        recme_service.setPics(recme_screen_shots);
-        services.add(recme_service);
-
-
-        Service airbnb_service = new Service();
-        airbnb_service.setName("Airbnb");
-        airbnb_service.setTitle("Airbnb, Inc.");
-        ArrayList<String> airbnb_screen_shots = new ArrayList<>();
-        airbnb_screen_shots.add("airbnb_scrn_1");
-        airbnb_screen_shots.add("airbnb_scrn_2");
-        airbnb_screen_shots.add("airbnb_scrn_3");
-        airbnb_service.setPics(airbnb_screen_shots);
-        services.add(airbnb_service);
-
-
-        return services;
-    }
 
 }

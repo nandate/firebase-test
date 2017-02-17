@@ -106,7 +106,6 @@ public class GenresActivity extends AppCompatActivity implements Observer{
                 public void onDataChange(DataSnapshot dataSnapshot) {
                      for(DataSnapshot genreSnapshot: dataSnapshot.getChildren()){
                          Genre genre =genreSnapshot.getValue(Genre.class);
-                         genre.setName(genre.getImage());
                          genres_point.put(genre.getName(),0);
                          genres.add(genre);
                      }
@@ -124,41 +123,6 @@ public class GenresActivity extends AppCompatActivity implements Observer{
             e.printStackTrace();
         }
 
-
-/*        FirebaseListAdapter mAdapter = new FirebaseListAdapter<Genre>(this,Genre.class,R.layout.genre_listview_item,mDatabase.child("genres")){
-
-            @Override
-            protected void populateView(View view, Genre genre, int position){
-                view.setTag(genre.getImage());
-                ((TextView)view.findViewById(R.id.genre_name_textView)).setText(genre.getImage());
-
-
-                view.setOnClickListener(new View.OnClickListener(){
-                    @Override
-                    public void onClick(View view){
-
-                        String genreName =(String)view.getTag();
-                        ImageView done_image = (ImageView)view.findViewById(R.id.done_imageView);
-
-
-                        if(User.getInstance().hasGenre(genreName)) {
-                            User.getInstance().removeSelectedGenre(genreName);
-                            done_image.setVisibility(View.INVISIBLE);
-                            System.out.println(genreName + "was removed.");
-                            System.out.println(User.getInstance().getSelected_genres());
-                        }else{
-                            User.getInstance().addSelectedGenre(genreName);
-                            done_image.setVisibility(View.VISIBLE);
-                            System.out.println(genreName + "was selected.");
-                            System.out.println(User.getInstance().getSelected_genres());
-                        }
-                    }
-                });
-            }
-        };
-
-        genresListView.setAdapter(mAdapter);
-*/
     }
 
     @Override
