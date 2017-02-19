@@ -53,7 +53,9 @@ public class User extends Observable{
 
     public void addUsedService(String serviceName)
     {
-        used_services.add(serviceName);
+        if(!used_services.contains(serviceName)){
+            used_services.add(serviceName);
+        }
     }
 
     public void removeUsedService(String serviceName)

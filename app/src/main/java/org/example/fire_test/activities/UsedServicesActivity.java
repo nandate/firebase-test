@@ -1,12 +1,10 @@
 package org.example.fire_test.activities;
 
 
+import android.content.Intent;
 import android.os.Bundle;
-import android.os.health.SystemHealthManager;
-import android.provider.ContactsContract;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
@@ -54,6 +52,8 @@ public class UsedServicesActivity extends AppCompatActivity{
         Toolbar toolbar = (Toolbar) findViewById(R.id.select_used_services_toolbar);
         setSupportActionBar(toolbar);
 
+
+
         mDatabase = FirebaseDatabase.getInstance().getReference();
         final ArrayList<String> selected_genres = User.getInstance().getSelected_genres();
         System.out.println(User.getInstance().getSelected_genres());
@@ -61,6 +61,14 @@ public class UsedServicesActivity extends AppCompatActivity{
 
         used_services_ListView = (ListView)findViewById(R.id.select_used_services_list_view);
         used_services_button = (Button)findViewById(R.id.used_service_button);
+
+        used_services_button.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view){
+                Intent intent = new Intent(view.getContext(),MainActivity.class);
+                startActivity(intent);
+            }
+        });
 
         try{
             mDatabase.child("genres").addValueEventListener(new ValueEventListener() {

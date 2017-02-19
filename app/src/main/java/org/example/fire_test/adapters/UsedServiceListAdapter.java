@@ -22,7 +22,6 @@ import java.util.List;
 
 public class UsedServiceListAdapter extends ArrayAdapter<Service>{
 
-    private int mButton;
 
     public UsedServiceListAdapter(Context context, List<Service> services){
         super(context, R.layout.used_services_listview_item,services);
@@ -81,14 +80,6 @@ public class UsedServiceListAdapter extends ArrayAdapter<Service>{
             String serviceName = (String)v.getTag();
             User user = User.getInstance();
 
-
-            if(user.hasService(serviceName)) {
-                user.removeUsedService(serviceName);
-                System.out.println(user.getused_services());
-            }else{
-                user.addUsedService(serviceName);
-                System.out.println(user.getused_services());
-            }
         }
 
     }
