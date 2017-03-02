@@ -74,6 +74,7 @@ public class GenreListAdapter extends ArrayAdapter<Genre>{
             ImageView done_image = (ImageView) v.findViewById(R.id.done_imageView);
             User user=User.getInstance();
 
+
             if(user.hasGenre(genreName)) {
                 user.removeSelectedGenre(genreName);
                 done_image.setVisibility(View.INVISIBLE);

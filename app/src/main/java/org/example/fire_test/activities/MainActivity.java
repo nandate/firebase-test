@@ -66,9 +66,9 @@ public class MainActivity extends AppCompatActivity{
 
 
             TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
-            tabLayout.addTab(tabLayout.newTab().setText("検索"));
-            tabLayout.addTab(tabLayout.newTab().setText("発信する"));
             tabLayout.addTab(tabLayout.newTab().setText("おすすめ"));
+            tabLayout.addTab(tabLayout.newTab().setText("発信する"));
+            tabLayout.addTab(tabLayout.newTab().setText("検索"));
             tabLayout.addTab(tabLayout.newTab().setText("お知らせ"));
             tabLayout.addTab(tabLayout.newTab().setText("マイページ"));
             tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);

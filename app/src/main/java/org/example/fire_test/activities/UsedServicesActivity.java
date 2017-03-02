@@ -25,8 +25,13 @@ import org.example.fire_test.models.Genre;
 import org.example.fire_test.models.User;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Observable;
 import java.util.Observer;
+import java.util.Set;
 
 /**
  * Created by takuya on 2/5/17.
@@ -40,8 +45,11 @@ public class UsedServicesActivity extends AppCompatActivity{
     private FirebaseAuth mFirebaseAuth;
     private FirebaseUser mFirebaseUser;
     private DatabaseReference mDatabase;
+    private String mUserId;
 
-    private List<Service> services=new ArrayList<>();
+    private List<Service> services = new ArrayList<>();
+    private HashMap<String,Integer> tags = new HashMap<>();
+
 
 
 
@@ -53,11 +61,14 @@ public class UsedServicesActivity extends AppCompatActivity{
         setSupportActionBar(toolbar);
 
 
-
         mDatabase = FirebaseDatabase.getInstance().getReference();
         final ArrayList<String> selected_genres = User.getInstance().getSelected_genres();
         System.out.println(User.getInstance().getSelected_genres());
 
+
+        mFirebaseAuth = FirebaseAuth.getInstance();
+        mFirebaseUser = mFirebaseAuth.getCurrentUser();
+        mUserId =mFirebaseUser.getUid();
 
         used_services_ListView = (ListView)findViewById(R.id.select_used_services_list_view);
         used_services_button = (Button)findViewById(R.id.used_service_button);
@@ -65,6 +76,7 @@ public class UsedServicesActivity extends AppCompatActivity{
         used_services_button.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view){
+                addTagPoint(User.getInstance().getUsed_services(),mDatabase,mUserId);
                 Intent intent = new Intent(view.getContext(),MainActivity.class);
                 startActivity(intent);
             }
@@ -81,6 +93,7 @@ public class UsedServicesActivity extends AppCompatActivity{
                             if(selected_genres.get(i).equals(genre.getName())){
                                 ArrayList<String> genre_services = genre.getServices();
                                 s.add(genre_services.get(0));
+
                             }
                         }
                     }
@@ -106,12 +119,7 @@ public class UsedServicesActivity extends AppCompatActivity{
                                 }
                                 UsedServiceListAdapter usedServiceListAdapter = new UsedServiceListAdapter(UsedServicesActivity.this,services);
                                 used_services_ListView.setAdapter(usedServiceListAdapter);
-
                             }
-
-
-
-
                 }
 
                 @Override
@@ -120,8 +128,6 @@ public class UsedServicesActivity extends AppCompatActivity{
                 }
 
             });
-
-
 
                 }
 
@@ -137,6 +143,41 @@ public class UsedServicesActivity extends AppCompatActivity{
         }
     }
 
+    private void addTagPoint(final List<Service> services, final DatabaseReference mDatabase, final String UserId)
+    {
+        final ArrayList<String> tag_names = new ArrayList<String>();
+        for(int i = 0;i < services.size();i++) {
+            Service service = services.get(i);
+            tag_names.addAll(service.getTags());
+        }
+
+        mDatabase.child("tags").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for(DataSnapshot tagsSnapshot:dataSnapshot.getChildren()){
+                    tags.put(tagsSnapshot.getValue(String.class),0);
+                }
+                for(int i=0;i<tag_names.size();i++){
+                    String name =tag_names.get(i);
+                    if(tags.containsKey(name)){
+                        Integer point = tags.get(name);
+                        tags.put(name,point+1);
+                    }else{
+                        tags.put(name,1);
+                    }
+                }
+                mDatabase.child("users").child(UserId).child("tags_point").setValue(tags);
+            }
+
+
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+    }
 
 
 }

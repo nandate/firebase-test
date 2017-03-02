@@ -1,7 +1,6 @@
 package org.example.fire_test.adapters;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,12 +33,12 @@ public class UsedServiceListAdapter extends ArrayAdapter<Service>{
         }
 
         String service_name = service.getName();
-        convertView.setTag(service_name);
+        convertView.setTag(service);
         convertView.setOnClickListener(new ServiceRowClick());
 
 
         TextView used_service_name_text_view = (TextView) convertView.findViewById(R.id.service_name_textView);
-        Button button = (Button)convertView.findViewById(R.id.select_used_service_toggleButton);
+        //Button button = (Button)convertView.findViewById(R.id.select_used_service_toggleButton);
 
         used_service_name_text_view.setText(service.getName());
 
@@ -77,8 +76,20 @@ public class UsedServiceListAdapter extends ArrayAdapter<Service>{
     private class ServiceRowClick implements View.OnClickListener{
         @Override
         public void onClick(View v){
-            String serviceName = (String)v.getTag();
+            Service service = (Service)v.getTag();
             User user = User.getInstance();
+            System.out.println(service);
+
+            System.out.println(user.getUsed_services());
+            user.addUsedService(service);
+
+
+            /*if(user.hasService(service)){
+                user.removeUsedService(service);
+            }else{
+                user.addUsedService(service);
+            }
+            */
 
         }
 

@@ -48,7 +48,6 @@ public class GenresActivity extends AppCompatActivity implements Observer{
     private FirebaseUser mFirebaseUser;
     private DatabaseReference mDatabase;
 
-    private HashMap<String,Integer> genres_point = new HashMap<String, Integer>();
     private HashMap<String,Integer> tags = new HashMap<String, Integer>();
 
     private String mUserId;
@@ -80,6 +79,7 @@ public class GenresActivity extends AppCompatActivity implements Observer{
         genres_counter_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                makeSelectedGenres(User.getInstance().getSelected_genres(),mDatabase,mUserId);
                 Intent intent = new Intent(view.getContext(),UsedServicesActivity.class);
                 startActivity(intent);
             }
@@ -87,29 +87,13 @@ public class GenresActivity extends AppCompatActivity implements Observer{
 
         try{
 
-            mDatabase.child("tags").addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    for(DataSnapshot tagsSnapshot:dataSnapshot.getChildren()){
-                        tags.put(tagsSnapshot.getValue(String.class),0);
-                    }
-                    makeTagsParams(tags,mDatabase,mUserId);
-                }
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-
-                }
-            });
-
             mDatabase.child("genres").addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                      for(DataSnapshot genreSnapshot: dataSnapshot.getChildren()){
                          Genre genre =genreSnapshot.getValue(Genre.class);
-                         genres_point.put(genre.getName(),0);
                          genres.add(genre);
                      }
-                    makeGenreParams(genres_point,mDatabase,mUserId);
                     GenreListAdapter genreListAdapter =new GenreListAdapter(GenresActivity.this,genres);
                     genresListView.setAdapter(genreListAdapter);
                 }
@@ -147,13 +131,10 @@ public class GenresActivity extends AppCompatActivity implements Observer{
 
     }
 
-    private void makeGenreParams(HashMap<String,Integer> genre,DatabaseReference mDatabase,String UserId)
+    private void makeSelectedGenres(List<String> selected_genres,DatabaseReference mDatabase,String UserId)
     {
-        mDatabase.child("users").child(UserId).child("genres_point").setValue(genre);
+        mDatabase.child("users").child(UserId).child("selected_genres").setValue(selected_genres);
+
     }
 
-    private void makeTagsParams(HashMap<String,Integer> tag,DatabaseReference mDatabase, String UserId)
-    {
-        mDatabase.child("users").child(UserId).child("tags_point").setValue(tag);
-    }
 }

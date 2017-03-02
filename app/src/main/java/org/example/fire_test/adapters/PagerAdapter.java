@@ -27,13 +27,13 @@ public class PagerAdapter extends FragmentStatePagerAdapter {
     public Fragment getItem(int position){
         switch (position){
             case 0:
-                SearchFragment tab1 = new SearchFragment();
+                RecommendFragment tab1 = new RecommendFragment();
                 return tab1;
             case 1:
                 ShareFragment tab2 = new ShareFragment();
                 return tab2;
             case 2:
-                RecommendFragment tab3 = new RecommendFragment();
+                SearchFragment tab3 = new SearchFragment();
                 return tab3;
             case 3:
                 NoticeFragment tab4 = new NoticeFragment();

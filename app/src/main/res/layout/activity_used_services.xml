@@ -18,12 +18,13 @@
             android:id="@+id/select_used_services_toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary"
+            android:background="@drawable/gradation_primal"
             android:popupTheme="@style/AppTheme.PopupOverlay">
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
+                android:text="@string/title_activity_used_services"
                 android:id="@+id/select_used_services_toolbar_title"/>
         </android.support.v7.widget.Toolbar>
 
@@ -43,7 +44,8 @@
     <Button
         android:id="@+id/used_service_button"
         android:text="Done"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_weight="0"/>
 
 </android.support.v7.widget.LinearLayoutCompat>

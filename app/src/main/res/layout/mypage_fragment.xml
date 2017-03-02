@@ -6,7 +6,8 @@
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Tab 5"/>
+        android:text="Tab 5"
+        android:layout_centerInParent="true"/>
 
 
 </RelativeLayout>

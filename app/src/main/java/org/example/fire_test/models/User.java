@@ -1,6 +1,8 @@
 package org.example.fire_test.models;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Observable;
 
 import org.example.fire_test.models.Genre;
@@ -11,7 +13,7 @@ import org.example.fire_test.models.Genre;
 public class User extends Observable{
 
     private ArrayList<String> selected_genres;
-    private ArrayList<String> used_services;
+    private List<Service> used_services;
 
 
     private static User ourInstance = new User();
@@ -46,21 +48,19 @@ public class User extends Observable{
         notifyObservers(selected_genres.size());
     }
 
-    public ArrayList<String> getused_services() {
-        used_services = used_services == null ? new ArrayList<String>() : used_services;
+    public List<Service> getUsed_services() {
+        used_services = used_services == null ? new ArrayList<Service>() : used_services;
         return used_services;
     }
 
-    public void addUsedService(String serviceName)
+    public void addUsedService(Service service)
     {
-        if(!used_services.contains(serviceName)){
-            used_services.add(serviceName);
-        }
+        used_services.add(service);
     }
 
-    public void removeUsedService(String serviceName)
+    public void removeUsedService(Service service)
     {
-        used_services.remove(serviceName);
+        used_services.remove(service);
     }
 
 
@@ -69,7 +69,7 @@ public class User extends Observable{
         return selected_genres.contains(genre);
     }
 
-    public boolean hasService(String service){
+    public boolean hasService(Service service){
         return used_services.contains(service);
     }
 
