@@ -10,6 +10,8 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.Volley;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -24,14 +26,12 @@ import org.example.fire_test.models.Service;
 import org.example.fire_test.models.Genre;
 import org.example.fire_test.models.User;
 
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
-import java.util.Observable;
-import java.util.Observer;
-import java.util.Set;
 
 /**
  * Created by takuya on 2/5/17.
@@ -77,6 +77,7 @@ public class UsedServicesActivity extends AppCompatActivity{
             @Override
             public void onClick(View view){
                 addTagPoint(User.getInstance().getUsed_services(),mDatabase,mUserId);
+                mDatabase.child("users").child(mUserId).child("recommend").setValue(User.getInstance().getUsed_services());
                 Intent intent = new Intent(view.getContext(),MainActivity.class);
                 startActivity(intent);
             }
@@ -168,8 +169,6 @@ public class UsedServicesActivity extends AppCompatActivity{
                 }
                 mDatabase.child("users").child(UserId).child("tags_point").setValue(tags);
             }
-
-
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
