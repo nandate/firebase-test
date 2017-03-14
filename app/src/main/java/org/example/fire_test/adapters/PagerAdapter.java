@@ -30,17 +30,11 @@ public class PagerAdapter extends FragmentStatePagerAdapter {
                 RecommendFragment tab1 = new RecommendFragment();
                 return tab1;
             case 1:
-                ShareFragment tab2 = new ShareFragment();
+                NoticeFragment tab2 = new NoticeFragment();
                 return tab2;
             case 2:
-                SearchFragment tab3 = new SearchFragment();
+                MyPageFragment tab3 = new MyPageFragment();
                 return tab3;
-            case 3:
-                NoticeFragment tab4 = new NoticeFragment();
-                return tab4;
-            case 4:
-                MyPageFragment tab5 = new MyPageFragment();
-                return tab5;
             default:
                 return null;
         }
